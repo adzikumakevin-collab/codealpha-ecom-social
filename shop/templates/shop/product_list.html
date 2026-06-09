@@ -1,0 +1,31 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<h1 class="text-center mb-5">Boutique Officielle CodeAlpha 🚀</h1>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">Pas d'image</div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{ product.name }}</h5>
+                <p class="card-text text-muted small">{{ product.description|truncatewords:15 }}</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 text-success fw-bold">{{ product.price }} €</span>
+                    <div class="btn-group">
+                        <a href="{% url 'product_detail' id=product.id %}" class="btn btn-sm btn-outline-secondary">Détails</a>
+                        <a href="{% url 'cart_add' product_id=product.id %}" class="btn btn-sm btn-primary">Ajouter 🛒</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-center w-100">Aucun produit disponible.</p>
+    {% endfor %}
+</div>
+{% endblock %}

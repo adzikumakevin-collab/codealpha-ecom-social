@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Votre Panier</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .total { font-size: 1.2em; font-weight: bold; text-align: right; }
+        .actions { margin-top: 20px; }
+        .btn { padding: 10px 15px; text-decoration: none; border-radius: 5px; color: white; }
+        .btn-remove { background-color: #ff4d4d; }
+        .btn-checkout { background-color: #28a745; }
+        .btn-continue { background-color: #007bff; }
+        img { max-width: 50px; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>Votre Panier</h1>
+
+    {% if cart_items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            {% endif %}
+                        </td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }} €</td>
+                        <td>{{ item.total_price }} €</td>
+                        <td>
+                            <a href="{% url 'cart_remove' product_id=item.product.id %}" class="btn btn-remove">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total">
+            Prix Total : {{ total_price }} €
+        </div>
+    {% else %}
+        <p>Votre panier est vide.</p>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{% url 'product_list' %}" class="btn btn-continue">Continuer mes achats</a>
+        {% if cart_items %}
+            <a href="{% url 'checkout' %}" class="btn btn-checkout">Passer à la caisse</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Fil d'actualité 📱</h1>
+            <a href="{% url 'create_post' %}" class="btn btn-primary">Publier un post</a>
+        </div>
+
+        {% for post in posts %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-white d-flex align-items-center">
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                        {{ post.author.username|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">{{ post.author.username }}</h6>
+                        <small class="text-muted">{{ post.created_at|date:"d M Y H:i" }}</small>
+                    </div>
+                </div>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="card-img-top" alt="Post image">
+                {% endif %}
+                <div class="card-body">
+                    <p class="card-text">{{ post.content }}</p>
+                    <hr>
+                    <div class="d-flex align-items-center mb-3">
+                        <a href="{% url 'like_post' post.id %}" class="text-decoration-none me-3">
+                            <i class="fa{% if user in post.likes.all %}-solid text-danger{% else %}-regular{% endif %} fa-heart"></i> 
+                            {{ post.likes.count }} likes
+                        </a>
+                        <span class="text-muted"><i class="far fa-comment"></i> {{ post.comments.count }} commentaires</span>
+                    </div>
+
+                    <!-- Commentaires -->
+                    <div class="bg-light p-3 rounded">
+                        {% for comment in post.comments.all %}
+                            <div class="mb-2 border-bottom pb-1 small">
+                                <strong>{{ comment.author.username }}</strong>: {{ comment.content }}
+                            </div>
+                        {% endfor %}
+                        
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'add_comment' post.id %}" method="post" class="mt-3">
+                                {% csrf_token %}
+                                <div class="input-group input-group-sm">
+                                    <input type="text" name="content" class="form-control" placeholder="Ajouter un commentaire..." required>
+                                    <button class="btn btn-outline-primary" type="submit">Envoyer</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="text-center mt-5">
+                <p class="text-muted">Aucun post pour le moment. Soyez le premier à publier !</p>
+                <a href="{% url 'create_post' %}" class="btn btn-outline-primary">Créer un post</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande Réussie - Merci !</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background: #f0f2f5; color: #1c1e21; }
+        .success-card { max-width: 700px; margin: auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .icon-check { font-size: 50px; color: #2ecc71; margin-bottom: 15px; }
+        h1 { color: #2c3e50; margin: 0; font-size: 24px; }
+        .order-meta { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; margin-bottom: 20px; font-size: 0.9em; color: #606770; }
+        .section-title { font-size: 18px; font-weight: bold; color: #2c3e50; margin: 25px 0 15px 0; border-left: 4px solid #3498db; padding-left: 10px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .info-item label { display: block; font-size: 0.8em; color: #606770; text-transform: uppercase; margin-bottom: 5px; }
+        .info-item p { margin: 0; font-weight: 500; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { text-align: left; font-size: 0.85em; color: #606770; border-bottom: 1px solid #eee; padding: 10px 0; }
+        td { padding: 15px 0; border-bottom: 1px solid #f9f9f9; }
+        .price-col { text-align: right; }
+        .total-box { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: right; }
+        .total-label { font-size: 1em; color: #606770; }
+        .total-amount { font-size: 1.5em; color: #2ecc71; font-weight: bold; margin-left: 10px; }
+        .footer-actions { text-align: center; margin-top: 40px; }
+        .btn { text-decoration: none; background: #3498db; color: white; padding: 12px 30px; border-radius: 6px; font-weight: bold; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="success-card">
+        <div class="header">
+            <i class="fas fa-check-circle icon-check"></i>
+            <h1>Confirmation de commande</h1>
+            <p>Merci pour votre achat. Votre commande a été reçue avec succès.</p>
+        </div>
+
+        <div class="order-meta">
+            <span>Numéro de commande : <strong>#{{ order.id }}</strong></span>
+            <span>Date : {{ order.created_at|date:"d M Y" }}</span>
+        </div>
+
+        <div class="section-title">Informations Client</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Nom & Prénom</label>
+                <p>{{ order.first_name }} {{ order.last_name }}</p>
+            </div>
+            <div class="info-item">
+                <label>Email de contact</label>
+                <p>{{ order.email }}</p>
+            </div>
+            <div class="info-item">
+                <label>Adresse de livraison</label>
+                <p>{{ order.address }}</p>
+            </div>
+            <div class="info-item">
+                <label>Ville & Code Postal</label>
+                <p>{{ order.postal_code }} {{ order.city }}</p>
+            </div>
+        </div>
+
+        <div class="section-title">Articles commandés</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th style="text-align: center;">Qté</th>
+                    <th class="price-col">Prix unit.</th>
+                    <th class="price-col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td style="text-align: center;">x{{ item.quantity }}</td>
+                    <td class="price-col">{{ item.price }} €</td>
+                    <td class="price-col">{{ item.get_total_price }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-box">
+            <span class="total-label">Montant total réglé</span>
+            <span class="total-amount">{{ order.total_price }} €</span>
+        </div>
+
+        <div class="footer-actions">
+            <a href="{% url 'product_list' %}" class="btn">Retour à la boutique</a>
+        </div>
+    </div>
+</body>
+</html>
