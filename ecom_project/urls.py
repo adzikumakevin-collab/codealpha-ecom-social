@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('shop.urls')),  # Ta boutique e-commerce reste à la racine !
-    path('social/', include('social.urls')),  # Ton réseau social sera bien sur /social/
+    path('', include('shop.urls')),  # Ma boutique e-commerce reste à la racine !
+    path('social/', include('social.urls')),  # Mon réseau social sera bien sur /social/
 ]
 
 if settings.DEBUG:
