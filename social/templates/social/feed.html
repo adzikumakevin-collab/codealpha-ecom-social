@@ -15,7 +15,9 @@
             {% for post in posts %}
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        <h5 class="card-title text-muted">@{{ post.author.username }}</h5>
+                        <h5 class="card-title">
+                            <a href="{% url 'user_profile' post.author.username %}" class="text-decoration-none text-primary">@{{ post.author.username }}</a>
+                        </h5>
                         <p class="card-text">{{ post.content }}</p>
                         {% if post.image %}
                             <img src="{{ post.image.url }}" class="img-fluid rounded mb-3" alt="Image de publication">

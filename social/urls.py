@@ -6,4 +6,6 @@ urlpatterns = [
     path('post/new/', views.create_post, name='create_post'),
     path('post/<int:post_id>/comment/', views.add_comment, name='add_comment'),
     path('post/<int:post_id>/like/', views.like_post, name='like_post'),
+    path('user/<str:username>/', views.user_profile, name='user_profile'),
+    path('user/<str:username>/follow/', views.toggle_follow, name='toggle_follow'),
 ]

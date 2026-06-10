@@ -28,3 +28,13 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user.username} aime Post {self.post.id}"
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('follower', 'user')  # Évite de suivre 2 fois la même personne
+
+    def _str_(self):
+        return f"{self.follower.username} suit {self.user.username}"
